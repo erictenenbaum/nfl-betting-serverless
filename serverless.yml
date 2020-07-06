@@ -1,0 +1,81 @@
+service: nfl-betting-serverless
+app: nfl-betting-serverless
+org: erictenenbaum10
+
+provider:
+  name: aws
+  stage: dev
+  region: ${env:APP_AWS_REGION}
+  runtime: python3.8
+  environment:
+    accountId: "#{AWS::AccountId}"
+    BUCKET_NAME: ${env:BUCKET_NAME}
+  iamRoleStatements:
+   - Effect: Allow
+     Action:
+       - dynamodb:PutItem
+       - dynamodb:UpdateItem
+     Resource:
+       - "arn:aws:dynamodb:${self:provider.region}:${self:provider.environment.accountId}:table/Teams"
+       - "arn:aws:dynamodb:${self:provider.region}:${self:provider.environment.accountId}:table/Games"
+       
+functions:
+  prep-data:
+    handler: cleanse_data.cleanse_data
+  upload-data:
+    handler: upload_data.upload_data
+    events:
+      - s3:
+          bucket: ${self:provider.environment.BUCKET_NAME}
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: clean-data/
+            - suffix: .json
+          existing: true
+
+resources: 
+  Resources:
+    MyS3Bucket:
+      Type: 'AWS::S3::Bucket'
+      Properties:
+        BucketName: ${self:provider.environment.BUCKET_NAME}
+    TeamsDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: _id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: _id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
+        TableName: 'Teams'
+    GamesDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: _id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: _id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
+        TableName: 'Games'
+
+plugins:
+  - serverless-pseudo-parameters
+  - serverless-dotenv-plugin
+  - serverless-s3-sync
+  - ./custom_plugin/kickoff
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  s3Sync:
+    - bucketName: ${self:provider.environment.BUCKET_NAME}
+      localDir: data
+
+
