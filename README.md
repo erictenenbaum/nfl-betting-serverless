@@ -37,4 +37,4 @@ I used **TypeScript/Node.js** and **DynamoDB** for the REST API endpoint in my [
 
    [kaggle]: <https://www.kaggle.com/>
    [Serverless Framework]: <https://www.serverless.com/>
-   [AWS] <https://aws.amazon.com/>
+   
