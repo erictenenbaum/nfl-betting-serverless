@@ -1,6 +1,6 @@
 # nfl-betting-serverless
 
-This is an [AWS] serverless deployment that leverages the [Serverless Framework].
+This is an [AWS](https://aws.amazon.com/) serverless deployment that leverages the [Serverless Framework].
 This deployment uses freely available data found on [kaggle]. Specifically I used a csv file
 detailing nfl game results dating back to 1966 through the most recent Super Bowl (https://www.kaggle.com/tobycrabtree/nfl-scores-and-betting-data?select=spreadspoke_scores.csv). I also used a nfl teams json file found on github (https://gist.github.com/fny/66892a96521f1f5406a8a388cf72537e) and augmented the file slightly to include previous team names associated with each franchise. (LA Rams --> St. Louis Rams --> LA Rams)
 
@@ -26,8 +26,8 @@ I used TypeScript/Node.js for the REST API endpoint in my [other deployment](htt
 
 # Running the deployment:
 
-  - In order to run this you will need to install the [Serverless Framework] and have access to an [AWS] account
-  - All you need to do is create an .env file with the following environment variables: ACCESS_KEY_ID and SECRET_ACCESS_KEY from your [AWS] account, BUCKET_NAME - the S3 bucket name you want to use. Needs to be globally unique. And APP_AWS_REGION - the [AWS] region you would like to deploy to.
+  - In order to run this you will need to install the [Serverless Framework] and have access to an [AWS](https://aws.amazon.com/) account
+  - All you need to do is create an .env file with the following environment variables: ACCESS_KEY_ID and SECRET_ACCESS_KEY from your [AWS](https://aws.amazon.com/) account, BUCKET_NAME - the S3 bucket name you want to use. Needs to be globally unique. And APP_AWS_REGION - the [AWS](https://aws.amazon.com/) region you would like to deploy to.
   - Next, you run `npm install` to install the serverless dependencies and plugins
   - Lastly, you run `sls deploy` and the [Serverless Framework] takes care of the rest!
 
