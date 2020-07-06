@@ -15,14 +15,14 @@ In this service, I only care about sports betting data, so I iterated through th
 
 This service leverages a community serverless plugin, S3 Sync, that uploads the nfl csv file and nfl_teams.json file to S3 during the deployment process. In addition, I created a custom serverless plugin appropriately titled: "Kickoff" that triggers a "data-prep" lambda that cleanses and preps the data as stated above. After the data is formatted propery as json, data-prep finishes by uploading the new data to a /clean-data path in the S3 bucket. The upload to /clean-data triggers another lambda, "upload-data" that pulls the properly formatted json files from S3 and then uploads the data to a "Teams" and "Games" table in DynamoDB. 
 
-In addition to this deployment, I also built another serverless deployment of a RESTful API endpoint using API Gateway and Lambda to retrive team and game data. Its still a work in progress, so it only supports getting all team data (all 32 NFL teams and their sports betting records) and getting a team by id. I will be continuing to build out the games piece. You can view that serverless deployment [here](https://github.com/erictenenbaum/nfl-betting-serverless-api-endpoint).
+In addition to this deployment, I also built another serverless deployment of a RESTful API endpoint using API Gateway and Lambda to retrive team and game data from DynamoDB. Its still a work in progress, so it only supports getting all team data (all 32 NFL teams and their sports betting records) and getting a team by id. I will be continuing to build out the games piece. You can view that serverless deployment [here](https://github.com/erictenenbaum/nfl-betting-serverless-api-endpoint).
 
 
 # Development Process
 
 I used the aws-python3 runtime for the data-prep and data-upload lambdas for a few reasons. First, python seemed like the natual choice for working with csv files. I did not need to install or use any 3rd party libraries. The only 3rd party library I used was boto3, which comes with the aws-python3 runtime. So, the deployment subsequent package management (or lack therof) was a lot more streamlined, and my deployment was < 10MB. Secondly, boto3 comes with a nice API for bulk upload that makes dealing with the 25 document BatchWriteItem limit painless. boto3's batch_writer handles all of that for you which is really nice!
 
-I used TypeScript/Node.js for the REST API endpoint in my [other deployment](https://github.com/erictenenbaum/nfl-betting-serverless-api-endpoint). 
+I used **TypeScript/Node.js** and **DynamoDB** for the REST API endpoint in my [other deployment](https://github.com/erictenenbaum/nfl-betting-serverless-api-endpoint). 
 
 # Running the deployment:
 
